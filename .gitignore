@@ -7,3 +7,10 @@
 *.cmx
 *.cmxs
 *.cmxa
+
+_build/
+# executables
+*.native
+# IDEA project-related metadata
+# -------------------------------------
+.idea/
