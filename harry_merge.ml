@@ -27,7 +27,7 @@ let handle_command output_src filenames () =
                 if prev_paragraphs_len = curr_text_paragraphs_len then
                     curr_text_paragraphs_len
                 else
-                    invalid_arg "Texts have different number of paragraphs.\n%!";
+                    invalid_arg "Texts have different number of paragraphs."
             )
         with invalid_arg -> eprintf "Texts have different number of paragraphs.\n%!";
                             exit 1
