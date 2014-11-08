@@ -76,8 +76,8 @@ let cmd_spec =
 
 let cmd =
     Command.basic
-        ~summary: "Merge chapters in different into one html table"
-        ~readme: (fun () -> "More detailed information")
+        ~summary: "Merge chapters in different languages into one html table"
+        ~readme: (fun () -> "Merge chapters in different languages into one html table")
         cmd_spec
         handle_command
 
