@@ -31,7 +31,16 @@ let handle_command output_src filenames () =
             )
         with invalid_arg -> eprintf "Texts have different number of paragraphs.\n%!";
                             exit 1
-    in ()
+    in
+    printf "<html><body><table>";
+    for paragraph = 0 to (total_paragraphs - 1) do
+        printf "<tr>";
+        for text = 0 to ((Array.length texts) - 1) do
+            printf "<td>%s</td>" normalized.(text).(paragraph) 
+        done;
+        printf "</tr>";
+    done;
+    printf "</table></body></html>"
 
 (* define a custom input argument type *)
 let text_file_t = 
