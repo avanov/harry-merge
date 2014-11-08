@@ -1,9 +1,35 @@
 open Core.Std
 
 
-
 let handle_command output_src filenames () =
-    ()
+    let texts = List.map filenames ~f:(fun filename ->
+        Str.global_replace
+            (Str.regexp "\n\n+")
+            "\n"
+            (String.strip (In_channel.read_all filename))
+    ) in
+    let normalized = List.map texts ~f:(fun text ->
+        String.split text '\n'
+    ) in
+    (* consistency check *)
+    let total_paragraphs = try 
+        List.fold_left normalized
+            ~init: (-1)
+            ~f: (fun prev text_by_paragraph -> 
+                let prev_paragraphs_len = match prev with
+                    (* initial value of -1 means that we analyze the first text *)
+                    | -1 -> List.length text_by_paragraph
+                    | _ -> prev
+                in
+                let curr_text_paragraphs_len = List.length text_by_paragraph in
+                if prev_paragraphs_len = curr_text_paragraphs_len then
+                    curr_text_paragraphs_len
+                else
+                    invalid_arg "Texts have different number of paragraphs.\n%!";
+            )
+        with invalid_arg -> eprintf "Texts have different number of paragraphs.\n%!";
+                            exit 1
+    in ()
 
 (* define a custom input argument type *)
 let text_file_t = 
