@@ -2,26 +2,28 @@ open Core.Std
 
 
 let handle_command output_src filenames () =
-    let texts = List.map filenames ~f:(fun filename ->
-        Str.global_replace
-            (Str.regexp "\n\n+")
-            "\n"
-            (String.strip (In_channel.read_all filename))
+    let texts = Array.map
+        (Array.of_list filenames)
+        ~f:(fun filename ->
+            Str.global_replace
+                (Str.regexp "\n\n+")
+                "\n"
+                (String.strip (In_channel.read_all filename))
     ) in
-    let normalized = List.map texts ~f:(fun text ->
-        String.split text '\n'
+    let normalized = Array.map texts ~f:(fun text ->
+        Array.of_list (String.split text '\n')
     ) in
     (* consistency check *)
     let total_paragraphs = try 
-        List.fold_left normalized
+        Array.fold normalized
             ~init: (-1)
             ~f: (fun prev text_by_paragraph -> 
                 let prev_paragraphs_len = match prev with
                     (* initial value of -1 means that we analyze the first text *)
-                    | -1 -> List.length text_by_paragraph
+                    | -1 -> Array.length text_by_paragraph
                     | _ -> prev
                 in
-                let curr_text_paragraphs_len = List.length text_by_paragraph in
+                let curr_text_paragraphs_len = Array.length text_by_paragraph in
                 if prev_paragraphs_len = curr_text_paragraphs_len then
                     curr_text_paragraphs_len
                 else
